@@ -32,7 +32,10 @@ A userscript that adds custom video controls to Instagram videos and reels, prov
   - [Violentmonkey](https://violentmonkey.github.io/) (Chrome, Firefox, Edge)
   - [Greasemonkey](https://www.greasespot.net/) (Firefox)
 
-### Installation Steps
+### Quick Install
+[![Install with Tampermonkey](https://img.shields.io/badge/Install%20with-Tampermonkey-blue?style=for-the-badge&logo=tampermonkey)](https://github.com/ttoan12/instagram-video-controls/raw/refs/heads/main/instagram-video-controls.user.js)
+
+### Manual Installation Steps
 1. Install a userscript manager in your browser
 2. Click on the userscript manager extension icon
 3. Select "Create a new script" or "Add new script"
@@ -40,6 +43,9 @@ A userscript that adds custom video controls to Instagram videos and reels, prov
 5. Paste the code into the script editor
 6. Save the script (Ctrl+S or Cmd+S)
 7. Visit Instagram and enjoy enhanced video controls!
+
+### Direct Install Link
+You can also install directly by clicking this link: [Install Script](https://github.com/ttoan12/instagram-video-controls/raw/refs/heads/main/instagram-video-controls.user.js)
 
 ## Usage
 
@@ -118,7 +124,7 @@ Feel free to contribute to this project by:
 
 ## License
 
-This project is open source. Please respect Instagram's terms of service when using this script.
+This project is licensed under the MIT License. Please respect Instagram's terms of service when using this script.
 
 ## Disclaimer
 
