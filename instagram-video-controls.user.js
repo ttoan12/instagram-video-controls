@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Instagram Video Controls
-// @version      1.0
+// @version      1.0.1
 // @description  Add custom video controls to Instagram videos and reels
 // @icon         https://github.com/ttoan12/instagram-video-controls/raw/refs/heads/main/instagram-video-controls.png
 
@@ -157,16 +157,16 @@
             position: relative;
         }
 
-        .original-video-controls > div {
+        .original-feed-video-controls {
             bottom: unset !important;
             top: 0 !important;
         }
 
-        .original-story-controls {
+        .original-story-video-controls {
             padding-bottom: 75px !important;
         }
 
-        .original-reel-controls > div {
+        .original-reel-video-controls {
             padding-bottom: 60px !important;
         }
     `;
@@ -192,87 +192,83 @@
 
   // Check if we're in a story
   function isStoryVideo() {
-    return window.location.pathname.includes("/stories");
+    return window.location.pathname.includes("/stories/") && !window.location.pathname.includes("/stories/direct/");
+  }
+
+  // Check if we're in a direct story
+  function isDirectStoryVideo() {
+    return window.location.pathname.includes("/stories/direct/");
   }
 
   // Check if we're in a reel
   function isReelVideo() {
-    return window.location.pathname.includes("/reels");
+    return window.location.pathname.includes("/reels/");
   }
 
-  // Find and move original video controls
-  function findAndMoveOriginalVideoControls(video) {
-    if (isStoryVideo() || isReelVideo()) {
-      return;
-    }
+  // Find and move feed video controls
+  function findAndMoveFeedVideoControls(video) {
+    if (isStoryVideo() || isReelVideo() || isDirectStoryVideo()) return;
 
     // Look for Instagram's control elements
-    const possibleControlContainers = [
-      video.parentElement.querySelector("div[data-instancekey] > div"),
-      video.parentElement.querySelector('div[role="group"]'),
-      video.parentElement.querySelector('div[style*="bottom"]'),
-      video.parentElement.querySelector('div > div > div[style*="position"]'),
-    ];
+    const possibleElements = video.parentElement.querySelectorAll(
+      "div[data-instancekey] > div > div:not([role='presentation'])"
+    );
 
-    possibleControlContainers.forEach((controlContainer) => {
-      if (
-        controlContainer &&
-        !controlContainer.classList.contains("custom-video-controls") &&
-        !controlContainer.classList.contains("original-video-controls")
-      ) {
-        controlContainer.classList.add("original-video-controls");
-
-        // Try to find and move individual control elements
-        const controlElements = controlContainer.querySelectorAll('div[role="button"], button, svg');
-        controlElements.forEach((element) => {
-          const parent = element.closest('div[style*="bottom"]');
-          if (parent) {
-            parent.style.bottom = "unset";
-            parent.style.top = "10px";
-          }
-        });
+    for (const element of possibleElements) {
+      if (element && !element.classList.contains("original-feed-video-controls")) {
+        element.classList.add("original-feed-video-controls");
       }
-    });
+    }
   }
 
   // Find and move story video controls
   function findAndMoveStoryVideoControls() {
-    if (!isStoryVideo()) {
-      return;
-    }
+    if (!isStoryVideo()) return;
 
     // Look for Instagram's control elements
-    const possibleControlContainers = [
-      document.body.querySelector('div:has(> div > div > div > textarea[placeholder^="Reply to"])'),
-      document.body.querySelector('div:has(> div > div > span > div > div > div > span > svg[aria-label="Like"])'),
-      document.body.querySelector('div:has(> div > div > div[role="button"] > div > svg[aria-label="Direct"])'),
-    ];
+    const possibleElements = document.body.querySelectorAll(
+      "div" +
+        ":has(> div:first-child > div:first-child > div:first-child > textarea[placeholder$='...'])" +
+        ":has(> div:first-child > div:nth-child(2) > span > div[data-visualcompletion] > div[role='button'])"
+    );
 
-    possibleControlContainers.forEach((controlContainer) => {
-      if (controlContainer && !controlContainer.classList.contains("custom-video-controls")) {
-        controlContainer.classList.add("original-story-controls");
+    for (const element of possibleElements) {
+      if (element && !element.classList.contains("original-story-video-controls")) {
+        element.classList.add("original-story-video-controls");
       }
-    });
+    }
+  }
+
+  // Find and move direct story video controls
+  function findAndMoveDirectStoryVideoControls() {
+    if (!isDirectStoryVideo()) return;
+
+    // Look for Instagram's control elements
+    const possibleElements = document.body.querySelectorAll(
+      "div:has(> div > div > div > span > div[data-visualcompletion] > div[role='button'])"
+    );
+
+    for (const element of possibleElements) {
+      if (element && !element.classList.contains("original-story-video-controls")) {
+        element.classList.add("original-story-video-controls");
+      }
+    }
   }
 
   // Find and move reel video controls
   function findAndMoveReelVideoControls(video) {
-    if (!isReelVideo()) {
-      return;
-    }
+    if (!isReelVideo()) return;
 
     // Look for Instagram's control elements
-    const possibleControlContainers = [video.parentElement.querySelector('div > div > div > div[role="presentation"]')];
+    const possibleElements = video.parentElement.querySelectorAll(
+      "div[data-instancekey] > div > div > div[role='presentation'] > div"
+    );
 
-    possibleControlContainers.forEach((controlContainer) => {
-      if (
-        controlContainer &&
-        !controlContainer.classList.contains("custom-video-controls") &&
-        !controlContainer.classList.contains("original-reel-controls")
-      ) {
-        controlContainer.classList.add("original-reel-controls");
+    for (const element of possibleElements) {
+      if (element && !element.classList.contains("original-reel-video-controls")) {
+        element.classList.add("original-reel-video-controls");
       }
-    });
+    }
   }
 
   // Create control elements
@@ -490,9 +486,10 @@
 
     // Try to move controls immediately and after a delay
     const findAndMoveControls = () => {
-      findAndMoveOriginalVideoControls(video);
+      findAndMoveFeedVideoControls(video);
       findAndMoveReelVideoControls(video);
       findAndMoveStoryVideoControls();
+      findAndMoveDirectStoryVideoControls();
     };
     findAndMoveControls();
     setTimeout(findAndMoveControls, 500);
