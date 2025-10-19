@@ -95,6 +95,19 @@ You can also install directly by clicking this link: [Install Script](https://gi
 - **Grant**: None (no special permissions required)
 - **Access**: Only runs on Instagram.com
 
+## Changelog
+
+### v1.0.1
+- Fixed memory leaks and unbounded intervals
+- Improved state management and cleanup
+- Added error handling and better error messages
+
+### v1.0.2
+- Context caching for better performance
+- Observer debouncing with requestAnimationFrame
+- CSS minification and layout optimizations
+- Global status interval for all videos
+
 ## Troubleshooting
 
 ### Controls Not Appearing

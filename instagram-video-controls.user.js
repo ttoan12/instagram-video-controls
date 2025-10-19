@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Instagram Video Controls
-// @version      1.0.1
+// @version      1.0.2
 // @description  Add custom video controls to Instagram videos and reels
 // @icon         https://github.com/ttoan12/instagram-video-controls/raw/refs/heads/main/instagram-video-controls.png
 
@@ -21,160 +21,63 @@
 
   // Styles for the custom controls
   const styles = `
-        .custom-video-controls {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 10000;
-            opacity: 0;
-            transition: opacity 0.3s ease, bottom 0.3s ease;
-            pointer-events: none;
-        }
-
-        .custom-video-controls.show {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .custom-video-controls.story-video {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .custom-video-controls.reel-video {
-        }
-
-        .video-progress-container {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .video-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045);
-            border-radius: 2px;
-            position: relative;
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .video-progress-container:hover {
-            height: 6px;
-        }
-
-        .video-controls-bottom {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .video-control-btn {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            padding: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease;
-        }
-
-        .video-control-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .video-control-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
-        }
-
-        .video-time {
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin-left: auto;
-        }
-
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .volume-slider {
-            width: 0;
-            opacity: 0;
-            transition: width 0.3s ease, opacity 0.3s ease;
-            -webkit-appearance: none;
-            appearance: none;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
-            outline: none;
-        }
-
-        .volume-container:hover .volume-slider {
-            width: 60px;
-            opacity: 1;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .volume-slider::-moz-range-thumb {
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            cursor: pointer;
-            border: none;
-        }
-
-        .video-container-wrapper {
-            position: relative;
-        }
-
-        .original-feed-video-controls {
-            bottom: unset !important;
-            top: 0 !important;
-        }
-
-        .original-story-video-controls {
-            padding-bottom: 75px !important;
-        }
-
-        .original-reel-video-controls {
-            padding-bottom: 60px !important;
-        }
+        .custom-video-controls{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 100%);padding:15px;display:flex;flex-direction:column;gap:10px;z-index:10000;opacity:0;transition:opacity 0.3s ease,bottom 0.3s ease;pointer-events:none}.custom-video-controls.show{opacity:1;pointer-events:all}.custom-video-controls.story-video{opacity:1;pointer-events:all}.video-progress-container{width:100%;height:4px;background:rgba(255,255,255,0.3);border-radius:2px;cursor:pointer;position:relative;overflow:hidden}.video-progress-bar{height:100%;background:linear-gradient(90deg,#833ab4,#fd1d1d,#fcb045);border-radius:2px;position:relative;width:0%;transition:width 0.1s linear}.video-progress-dot{position:absolute;width:8px;height:8px;background:white;border-radius:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 2px 4px rgba(0,0,0,0.5);pointer-events:none;left:0%;transition:left 0.1s linear}.video-progress-container:hover .video-progress-dot{width:12px;height:12px}.video-progress-container:hover{height:6px}.video-controls-bottom{display:flex;align-items:center;gap:15px}.video-control-btn{background:0;border:0;color:white;cursor:pointer;padding:5px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s ease}.video-control-btn:hover{transform:scale(1.1)}.video-control-btn svg{width:20px;height:20px;fill:white;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.5))}.video-time{color:white;font-size:13px;font-weight:500;text-shadow:0 1px 2px rgba(0,0,0,0.5);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin-left:auto}.volume-container{display:flex;align-items:center;gap:8px}.volume-slider{width:0;opacity:0;transition:width 0.3s ease,opacity 0.3s ease;-webkit-appearance:none;appearance:none;height:4px;background:rgba(255,255,255,0.3);border-radius:2px;outline:0}.volume-container:hover .volume-slider{width:60px;opacity:1}.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;background:white;border-radius:50%;cursor:pointer}.volume-slider::-moz-range-thumb{width:12px;height:12px;background:white;border-radius:50%;cursor:pointer;border:0}.video-container-wrapper{position:relative}.original-feed-video-controls{bottom:unset !important;top:0 !important}.original-story-video-controls{padding-bottom:75px !important}.original-reel-video-controls{padding-bottom:60px !important}
     `;
 
   // Add styles to the page
   const styleSheet = document.createElement("style");
   styleSheet.textContent = styles;
   document.head.appendChild(styleSheet);
+
+  // Per-video state management to avoid memory leaks
+  const videoStateMap = new Map();
+
+  // Single global drag listener to prevent memory leaks
+  let currentDraggingState = null;
+
+  // Cache context type and only update on URL change
+  let cachedContext = null;
+  let lastCachedUrl = location.href;
+
+  function getCachedContext() {
+    const currentUrl = location.href;
+    if (currentUrl !== lastCachedUrl) {
+      lastCachedUrl = currentUrl;
+      updateContextCache();
+    }
+    return cachedContext;
+  }
+
+  function updateContextCache() {
+    const pathname = window.location.pathname;
+    if (pathname.includes("/stories/direct/")) {
+      cachedContext = "direct-story";
+    } else if (pathname.includes("/stories/")) {
+      cachedContext = "story";
+    } else if (pathname.includes("/reels/")) {
+      cachedContext = "reel";
+    } else {
+      cachedContext = "feed";
+    }
+  }
+
+  // Initialize cache
+  updateContextCache();
+
+  function handleGlobalMouseMove(e) {
+    if (currentDraggingState) {
+      currentDraggingState.seekToPosition(e.clientX);
+      currentDraggingState.showControls();
+    }
+  }
+
+  function handleGlobalMouseUp() {
+    currentDraggingState = null;
+  }
+
+  // Global drag listeners for all videos
+  document.addEventListener("mousemove", handleGlobalMouseMove);
+  document.addEventListener("mouseup", handleGlobalMouseUp);
 
   // SVG Icons
   const icons = {
@@ -190,26 +93,10 @@
       '<svg viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>',
   };
 
-  // Check if we're in a story
-  function isStoryVideo() {
-    return window.location.pathname.includes("/stories/") && !window.location.pathname.includes("/stories/direct/");
-  }
-
-  // Check if we're in a direct story
-  function isDirectStoryVideo() {
-    return window.location.pathname.includes("/stories/direct/");
-  }
-
-  // Check if we're in a reel
-  function isReelVideo() {
-    return window.location.pathname.includes("/reels/");
-  }
-
   // Find and move feed video controls
   function findAndMoveFeedVideoControls(video) {
-    if (isStoryVideo() || isReelVideo() || isDirectStoryVideo()) return;
+    if (getCachedContext() !== "feed") return;
 
-    // Look for Instagram's control elements
     const possibleElements = video.parentElement.querySelectorAll(
       "div[data-instancekey] > div > div:not([role='presentation'])"
     );
@@ -223,9 +110,8 @@
 
   // Find and move story video controls
   function findAndMoveStoryVideoControls() {
-    if (!isStoryVideo()) return;
+    if (getCachedContext() !== "story") return;
 
-    // Look for Instagram's control elements
     const possibleElements = document.body.querySelectorAll(
       "div" +
         ":has(> div:first-child > div:first-child > div:first-child > textarea[placeholder$='...'])" +
@@ -241,9 +127,8 @@
 
   // Find and move direct story video controls
   function findAndMoveDirectStoryVideoControls() {
-    if (!isDirectStoryVideo()) return;
+    if (getCachedContext() !== "direct-story") return;
 
-    // Look for Instagram's control elements
     const possibleElements = document.body.querySelectorAll(
       "div:has(> div > div > div > span > div[data-visualcompletion] > div[role='button'])"
     );
@@ -257,9 +142,8 @@
 
   // Find and move reel video controls
   function findAndMoveReelVideoControls(video) {
-    if (!isReelVideo()) return;
+    if (getCachedContext() !== "reel") return;
 
-    // Look for Instagram's control elements
     const possibleElements = video.parentElement.querySelectorAll(
       "div[data-instancekey] > div > div > div[role='presentation'] > div"
     );
@@ -268,6 +152,23 @@
       if (element && !element.classList.contains("original-reel-video-controls")) {
         element.classList.add("original-reel-video-controls");
       }
+    }
+  }
+
+  // Update control visibility based on page context
+  function updateVideoContextClass(videoState) {
+    const context = getCachedContext();
+    const controls = videoState.controls;
+
+    if (context === "story" || context === "direct-story") {
+      controls.classList.add("story-video");
+      controls.classList.remove("reel-video");
+    } else if (context === "reel") {
+      controls.classList.add("reel-video");
+      controls.classList.remove("story-video");
+    } else {
+      controls.classList.remove("story-video");
+      controls.classList.remove("reel-video");
     }
   }
 
@@ -282,6 +183,9 @@
     const progressBar = document.createElement("div");
     progressBar.className = "video-progress-bar";
     progressContainer.appendChild(progressBar);
+    const progressDot = document.createElement("div");
+    progressDot.className = "video-progress-dot";
+    progressContainer.appendChild(progressDot);
 
     // Bottom controls
     const bottomControls = document.createElement("div");
@@ -331,17 +235,35 @@
 
     container.appendChild(controls);
 
-    // Event handlers
-    let hideTimeout;
+    // Per-video state stored in Map
+    const videoState = {
+      hideTimeout: null,
+      statusCheckInterval: null,
+      video: video,
+      controls: controls,
+      progressContainer: progressContainer,
+      progressBar: progressBar,
+      progressDot: progressDot,
+      playBtn: playBtn,
+      volumeBtn: volumeBtn,
+      volumeSlider: volumeSlider,
+      timeDisplay: timeDisplay,
+      fullscreenBtn: fullscreenBtn,
+      container: container,
+      cachedRect: null,
+    };
+
+    // Store state in map
+    videoStateMap.set(video, videoState);
 
     function showControls(value = true) {
       if (value) {
-        controls.classList.add("show");
-        clearTimeout(hideTimeout);
-        hideTimeout = setTimeout(() => controls.classList.remove("show"), 3000);
+        videoState.controls.classList.add("show");
+        clearTimeout(videoState.hideTimeout);
+        videoState.hideTimeout = setTimeout(() => videoState.controls.classList.remove("show"), 3000);
       } else {
-        controls.classList.remove("show");
-        clearTimeout(hideTimeout);
+        videoState.controls.classList.remove("show");
+        clearTimeout(videoState.hideTimeout);
       }
     }
 
@@ -352,25 +274,29 @@
       return `${minutes}:${secs.toString().padStart(2, "0")}`;
     }
 
-    function checkStoryOrReelStatus() {
-      if (isStoryVideo()) {
-        controls.classList.add("story-video");
-      } else if (isReelVideo()) {
-        controls.classList.add("reel-video");
-      } else {
-        controls.classList.remove("story-video");
-        controls.classList.remove("reel-video");
+    // Cache progress bar rect to avoid repeated layout recalculations during drag
+    function seekToPosition(clientX) {
+      if (!videoState.cachedRect) {
+        videoState.cachedRect = videoState.progressContainer.getBoundingClientRect();
       }
+      const x = clientX - videoState.cachedRect.left;
+      const percentage = Math.max(0, Math.min(1, x / videoState.cachedRect.width));
+      videoState.video.currentTime = percentage * videoState.video.duration;
+      videoState.progressDot.style.left = percentage * 100 + "%";
     }
+
+    // Attach methods to state for global listener access
+    videoState.seekToPosition = seekToPosition;
+    videoState.showControls = showControls;
 
     // Controls events
     playBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (video.paused) {
-        video.play();
+      if (videoState.video.paused) {
+        videoState.video.play();
         playBtn.innerHTML = icons.pause;
       } else {
-        video.pause();
+        videoState.video.pause();
         playBtn.innerHTML = icons.play;
       }
       showControls();
@@ -380,40 +306,54 @@
       const rect = progressContainer.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const percentage = x / rect.width;
-      video.currentTime = percentage * video.duration;
+      videoState.video.currentTime = percentage * videoState.video.duration;
       showControls();
     });
 
+    progressContainer.addEventListener("mousedown", (e) => {
+      videoState.cachedRect = progressContainer.getBoundingClientRect();
+      currentDraggingState = videoState;
+      seekToPosition(e.clientX);
+      showControls();
+    });
+
+    progressContainer.addEventListener("mouseup", () => {
+      videoState.cachedRect = null;
+    });
+
     volumeSlider.addEventListener("input", (e) => {
-      video.volume = e.target.value / 100;
-      video.muted = false; // Unmute when adjusting volume
-      if (video.volume === 0) {
-        volumeBtn.innerHTML = icons.volumeMute;
-      } else {
-        volumeBtn.innerHTML = icons.volume;
+      if (videoState.video) {
+        videoState.video.volume = e.target.value / 100;
+        videoState.video.muted = false;
+        if (videoState.video.volume === 0) {
+          volumeBtn.innerHTML = icons.volumeMute;
+        } else {
+          volumeBtn.innerHTML = icons.volume;
+        }
       }
     });
 
     volumeBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (video.muted || video.volume === 0) {
-        video.muted = false;
-        // Restore to previous volume or default to 100%
-        const targetVolume = video.volume === 0 ? 1 : video.volume;
-        video.volume = targetVolume;
-        volumeSlider.value = targetVolume * 100;
-        volumeBtn.innerHTML = icons.volume;
-      } else {
-        video.muted = true;
-        volumeSlider.value = 0;
-        volumeBtn.innerHTML = icons.volumeMute;
+      if (videoState.video) {
+        if (videoState.video.muted || videoState.video.volume === 0) {
+          videoState.video.muted = false;
+          const targetVolume = videoState.video.volume === 0 ? 1 : videoState.video.volume;
+          videoState.video.volume = targetVolume;
+          volumeSlider.value = targetVolume * 100;
+          volumeBtn.innerHTML = icons.volume;
+        } else {
+          videoState.video.muted = true;
+          volumeSlider.value = 0;
+          volumeBtn.innerHTML = icons.volumeMute;
+        }
+        showControls();
       }
-      showControls();
     });
 
     fullscreenBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const container = video.closest(".video-container-wrapper") || video.parentElement;
+      const container = videoState.video.closest(".video-container-wrapper") || videoState.video.parentElement;
 
       if (!document.fullscreenElement) {
         container
@@ -422,7 +362,7 @@
             fullscreenBtn.innerHTML = icons.exitFullscreen;
           })
           .catch((err) => {
-            console.log("Fullscreen error:", err);
+            console.warn("Fullscreen not available:", err.message);
           });
       } else {
         document.exitFullscreen().then(() => {
@@ -442,31 +382,39 @@
     });
 
     video.addEventListener("timeupdate", () => {
-      const progress = (video.currentTime / video.duration) * 100;
-      progressBar.style.width = progress + "%";
-      timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-    });
-
-    video.addEventListener("volumechange", () => {
-      if (video.muted) {
-        volumeSlider.value = 0;
-        volumeBtn.innerHTML = icons.volumeMute;
-      } else {
-        volumeSlider.value = Math.round(video.volume * 100);
-        volumeBtn.innerHTML = video.volume === 0 ? icons.volumeMute : icons.volume;
+      if (videoState.video && videoState.video.duration) {
+        const progress = (videoState.video.currentTime / videoState.video.duration) * 100;
+        progressBar.style.width = progress + "%";
+        progressDot.style.left = progress + "%";
+        timeDisplay.textContent = `${formatTime(videoState.video.currentTime)} / ${formatTime(
+          videoState.video.duration
+        )}`;
       }
     });
 
-    // On hover events
-    controls.addEventListener("mouseenter", () => showControls());
-    controls.addEventListener("mousemove", () => showControls());
-    container.addEventListener("mouseenter", () => showControls());
-    container.addEventListener("mousemove", () => showControls());
+    video.addEventListener("volumechange", () => {
+      if (videoState.video) {
+        if (videoState.video.muted) {
+          volumeSlider.value = 0;
+          volumeBtn.innerHTML = icons.volumeMute;
+        } else {
+          volumeSlider.value = Math.round(videoState.video.volume * 100);
+          volumeBtn.innerHTML = videoState.video.volume === 0 ? icons.volumeMute : icons.volume;
+        }
+      }
+    });
+
+    // Control hover/show handlers
+    const showControlsHandler = () => showControls();
+
+    controls.addEventListener("mouseenter", showControlsHandler);
+    controls.addEventListener("mousemove", showControlsHandler);
+    container.addEventListener("mouseenter", showControlsHandler);
+    container.addEventListener("mousemove", showControlsHandler);
     container.addEventListener("mouseleave", () => showControls(false));
 
-    // Check immediately and periodically for story or reel changes
-    checkStoryOrReelStatus();
-    setInterval(checkStoryOrReelStatus, 1000);
+    // Update context class immediately
+    updateVideoContextClass(videoState);
 
     return controls;
   }
@@ -492,16 +440,49 @@
       findAndMoveDirectStoryVideoControls();
     };
     findAndMoveControls();
-    setTimeout(findAndMoveControls, 500);
+    setTimeout(findAndMoveControls, 1000);
 
     // Create and add custom controls
     createControls(video, container);
   }
 
-  // Observer to detect new videos
+  // Cleanup function for removed videos
+  function cleanupVideo(video) {
+    const videoState = videoStateMap.get(video);
+    if (videoState) {
+      // Clear timeouts
+      if (videoState.hideTimeout) {
+        clearTimeout(videoState.hideTimeout);
+      }
+      // Remove from map
+      videoStateMap.delete(video);
+      // Reset dragging state if this video was being dragged
+      if (currentDraggingState === videoState) {
+        currentDraggingState = null;
+      }
+    }
+  }
+
+  // Batch DOM updates using requestAnimationFrame to avoid excessive processing
+  let pendingObserverCheck = false;
+
   const observer = new MutationObserver(() => {
-    const videos = document.querySelectorAll("video");
-    videos.forEach(processVideo);
+    if (pendingObserverCheck) return;
+    pendingObserverCheck = true;
+
+    requestAnimationFrame(() => {
+      const videos = document.querySelectorAll("video");
+      videos.forEach(processVideo);
+
+      // Clean up videos that no longer exist in the DOM
+      for (const [video, state] of videoStateMap.entries()) {
+        if (!document.contains(video)) {
+          cleanupVideo(video);
+        }
+      }
+
+      pendingObserverCheck = false;
+    });
   });
 
   // Start observing
@@ -516,29 +497,16 @@
     videos.forEach(processVideo);
   }, 1000);
 
-  // Handle URL changes for stories and reels
-  let lastUrl = location.href;
+  // Update all video context classes once per second
+  setInterval(() => {
+    getCachedContext();
+    videoStateMap.forEach((videoState) => {
+      updateVideoContextClass(videoState);
+    });
+  }, 1000);
+
+  // Monitor URL changes to update context cache
   new MutationObserver(() => {
-    const url = location.href;
-    if (url !== lastUrl) {
-      lastUrl = url;
-      // Recheck all videos when URL changes
-      setTimeout(() => {
-        const videos = document.querySelectorAll("video");
-        videos.forEach((video) => {
-          const controls = video.parentElement.querySelector(".custom-video-controls");
-          if (controls) {
-            if (isStoryVideo()) {
-              controls.classList.add("story-video");
-            } else if (isReelVideo()) {
-              controls.classList.add("reel-video");
-            } else {
-              controls.classList.remove("story-video");
-              controls.classList.remove("reel-video");
-            }
-          }
-        });
-      }, 500);
-    }
+    // Context cache auto-updates on next getCachedContext() call
   }).observe(document, { subtree: true, childList: true });
 })();
