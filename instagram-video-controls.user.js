@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Instagram Video Controls
-// @version      1.0.2
+// @version      1.0.3
 // @description  Add custom video controls to Instagram videos and reels
 // @icon         https://github.com/ttoan12/instagram-video-controls/raw/refs/heads/main/instagram-video-controls.png
 
@@ -113,9 +113,11 @@
     if (getCachedContext() !== "story") return;
 
     const possibleElements = document.body.querySelectorAll(
-      "div" +
-        ":has(> div:first-child > div:first-child > div:first-child > textarea[placeholder$='...'])" +
-        ":has(> div:first-child > div:nth-child(2) > span > div[data-visualcompletion] > div[role='button'])"
+      `div
+        :has(> div:first-child > div:first-child > div:first-child > textarea[placeholder$='...'])
+        :has(> div:first-child > div:nth-child(2) > span > div[data-visualcompletion] > div[role='button']),
+      div
+        :has(> div:first-child > div > span > div[data-visualcompletion] > div[role='button'])`
     );
 
     for (const element of possibleElements) {

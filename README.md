@@ -108,6 +108,9 @@ You can also install directly by clicking this link: [Install Script](https://gi
 - CSS minification and layout optimizations
 - Global status interval for all videos
 
+### v1.0.3
+- Improve detection for stories
+
 ## Troubleshooting
 
 ### Controls Not Appearing
